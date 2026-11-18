@@ -1,1 +1,298 @@
+# Linked List
 
+## 1. What is a Linked List?
+
+A **linked list** is a linear data structure used to store a collection of elements called **nodes**.
+
+Each node contains two main parts:
+
+1. **Data** – the value or information stored in the node.
+2. **Pointer (link)** – the address of the next node in the list.
+
+Unlike an array, the nodes of a linked list do not have to be stored next to each other in memory. Pointers connect the nodes and maintain their order.
+
+## 2. Structure of a Node
+
+A simple node in C++ can be created using a structure:
+
+```cpp
+struct Node
+{
+    int data;       // Stores the value
+    Node* next;     // Stores the address of the next node
+};
+```
+
+- `data` stores the actual value.
+- `next` stores the address of the next node.
+- `Node*` means a pointer to a Node.
+
+## 3. How Does a Linked List Work?
+
+A linked list uses a pointer called **head** to identify its first node.
+
+Example: a linked list containing 10, 20 and 30.
+
+```text
+ head
+  |
+  v
++------+------+
+|  10  |   o-----> +------+------+
++------+------+   |  20  |   o-----> +------+------+
+                  +------+------+   |  30  | NULL |
+                                   +------+------+
+```
+
+Here is how it works:
+
+1. The `head` pointer stores the address of the first node.
+2. The first node stores its data (10) and the address of the second node.
+3. The second node stores its data (20) and the address of the third node.
+4. The last node stores `NULL` (or `nullptr`) in its `next` pointer because there is no next node.
+
+**Important:** The last node points to `NULL`, not to another node. This tells the program where the list ends.
+
+## 4. What Does NULL Mean?
+
+`NULL` means that a pointer is not pointing to a valid object.
+
+For example:
+
+```cpp
+Node* head = NULL;
+```
+
+This means the linked list is currently empty because the head pointer does not point to any node.
+
+In modern C++, `nullptr` is preferred:
+
+```cpp
+Node* head = nullptr;
+```
+
+## 5. Creating a Linked List
+
+The following example creates three nodes and connects them.
+
+```cpp
+#include <iostream>
+using namespace std;
+
+struct Node
+{
+    int data;
+    Node* next;
+};
+
+int main()
+{
+    // Create three nodes dynamically
+    Node* first = new Node;
+    Node* second = new Node;
+    Node* third = new Node;
+
+    // Store data in each node
+    first->data = 10;
+    second->data = 20;
+    third->data = 30;
+
+    // Connect the nodes
+    first->next = second;
+    second->next = third;
+    third->next = nullptr;
+
+    // Head points to the first node
+    Node* head = first;
+
+    return 0;
+}
+```
+
+The `new` operator dynamically creates each node in memory and returns its address.
+
+The arrow operator (`->`) is used to access a member through a pointer. For example, `first->data` accesses the data stored in the node pointed to by `first`.
+
+## 6. Traversing a Linked List
+
+**Traversal** means visiting each node one by one, usually to display or process its data.
+
+We start from `head` and follow the `next` pointer until we reach `NULL`.
+
+```cpp
+Node* temp = head;
+
+while (temp != nullptr)
+{
+    cout << temp->data << endl;
+    temp = temp->next;
+}
+```
+
+Step by step:
+
+1. Set `temp = head` to start at the first node.
+2. Check whether `temp` is not `NULL`.
+3. Display the data in the current node.
+4. Move to the next node using `temp = temp->next`.
+5. Repeat until `temp` becomes `NULL`.
+
+For the example list, the output is:
+
+```text
+10
+20
+30
+```
+
+## 7. Insertion at the Beginning
+
+A new node can be inserted at the beginning of a linked list by changing the head pointer.
+
+Suppose the current list is:
+
+```text
+head -> 10 -> 20 -> 30 -> NULL
+```
+
+To insert 5:
+
+```cpp
+Node* newNode = new Node;
+newNode->data = 5;
+
+// Connect the new node to the current first node
+newNode->next = head;
+
+// Make the new node the first node
+head = newNode;
+```
+
+The list becomes:
+
+```text
+head -> 5 -> 10 -> 20 -> 30 -> NULL
+```
+
+This operation takes **O(1)** time because it changes only a few pointers. It does not need to move all existing nodes.
+
+## 8. Common Linked List Operations
+
+| Operation | Meaning |
+|---|---|
+| Insertion | Adding a new node |
+| Deletion | Removing a node |
+| Traversal | Visiting nodes one by one |
+| Searching | Finding a particular value |
+| Updating | Changing the data in a node |
+
+## 9. Types of Linked Lists
+
+### 1. Singly Linked List
+Each node points to the next node. The last node points to `NULL`.
+
+```text
+10 -> 20 -> 30 -> NULL
+```
+
+### 2. Doubly Linked List
+Each node contains two pointers: one to the previous node and one to the next node. It can be traversed in both directions.
+
+```text
+NULL <- 10 <-> 20 <-> 30 -> NULL
+```
+
+### 3. Circular Linked List
+The last node points back to the first node instead of pointing to `NULL`.
+
+```text
+      +-------------------+
+      |                   |
+      v                   |
+10 -> 20 -> 30 -----------+
+```
+
+## 10. Time Complexity
+
+For a singly linked list:
+
+| Operation | Time Complexity | Reason |
+|---|---|---|
+| Access by position | O(n) | Nodes are visited one by one |
+| Search | O(n) | May need to check every node |
+| Insert at beginning | O(1) | Only a few pointer changes |
+| Delete at beginning | O(1) | Move head to the next node |
+| Insert at end | O(n) | Usually must traverse to the last node |
+| Traverse all nodes | O(n) | Every node is visited once |
+
+These are the usual complexities when the list has only a head pointer. Keeping a tail pointer can make insertion at the end O(1).
+
+## 11. Advantages of Linked Lists
+
+- **Dynamic size:** Nodes can be added or removed while the program is running.
+- **Easy insertion and deletion:** Adding or removing a node does not require shifting all the other elements.
+- **Flexible memory allocation:** Nodes do not need to occupy consecutive memory locations.
+
+## 12. Disadvantages of Linked Lists
+
+- **Extra memory:** Each node needs memory for one or more pointers.
+- **No direct indexing:** To reach a particular position, the list generally has to be traversed from the beginning.
+- **Pointer handling:** Incorrect pointer changes can cause errors or lose access to nodes.
+- **Cache performance:** Nodes may be scattered in memory, so traversal can be less cache-friendly than array traversal.
+
+## 13. Linked List in the Hospital Management Program
+
+In the Hospital Management System, each patient is stored in a node of the linked list.
+
+The patient structure contains:
+
+```cpp
+struct Patient
+{
+    int id;
+    string name;
+    int age;
+    string disease;
+    Patient* next;
+    Patient* hashNext;
+};
+```
+
+The `next` pointer connects patient records in the linked list.
+
+The program uses:
+
+```cpp
+Patient* head = NULL;
+```
+
+This pointer identifies the first patient in the linked list.
+
+When a patient is registered, the program inserts the new patient at the beginning:
+
+```cpp
+p->next = head;
+head = p;
+```
+
+This makes the newly registered patient the first node.
+
+When all patient records are displayed, the program starts at `head` and follows `next` until it reaches `NULL`.
+
+**Note:** The same Patient structure also has a separate pointer named `hashNext`. It is used to connect patients inside hash-table buckets for searching. The `next` pointer is used for the main linked list; the two pointers serve different purposes.
+
+## 14. Linked List vs Array
+
+| Array | Linked List |
+|---|---|
+| Elements are stored in consecutive memory locations. | Nodes can be stored at different memory locations. |
+| Usually has a fixed size when a normal fixed-size array is created. | Can grow or shrink dynamically. |
+| Supports direct access using an index. | Requires traversal to reach a position. |
+| Inserting in the middle may require shifting elements. | Insertion can be done by changing links once the position is reached. |
+| Does not need a pointer in every element. | Each node stores one or more pointers. |
+
+## Conclusion
+
+A linked list is a linear data structure in which nodes are connected using pointers. Each node stores data and the address of the next node. The head pointer identifies the first node, and the last node points to `NULL`.
+
+Linked lists are useful when a program needs a flexible collection of data that can grow or shrink during execution.
